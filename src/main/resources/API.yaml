@@ -1,0 +1,247 @@
+swagger: "2.0"
+info:
+  description: "This is the API documentation v1.0.0 of the project Vandy Course Planner."
+  version: "1.0.0"
+  title: "Vandy Course Planner"
+  # termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "xiaoliang.zhu@vanderbilt.edu"
+  # license:
+  #   name: "Apache 2.0"
+  #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/"
+tags:
+- name: "Courses"
+  description: "Operations about course infomation"
+- name: "Prereqs"
+  description: "Operations about course prerequisite and hierarchy"
+- name: "Savings"
+  description: "Operations about users' saved versions"
+schemes:
+- "https"
+- "http"
+paths:
+  /courses:
+    get:
+      tags:
+      - "Courses"
+      summary: "Get all course infomation given level"
+      operationId: "getAllCourse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "level"
+        type: "integer"
+        in: "query"
+        enum: [1,2,3,4]
+        description: "Course level for searching; empty to search for all"
+      responses:
+        "200":
+          description: "Successful"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CourseDetail"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Not Found"
+        "405":
+          description: "Invalid input"
+  /prereqs:
+    get:
+      tags:
+      - "Prereqs"
+      summary: "Get all course status given selected courses"
+      operationId: "getAllCourseStatus"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Array of selected courses"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Course"
+      responses:
+        "200":
+          description: "Successful, returning status of each course"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CourseStatus"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Not Found"
+        "405":
+          description: "Invalid input"
+  /savings:
+    get:
+      tags:
+      - "Savings"
+      summary: "Get all saved courses of a user"
+      operationId: "getAllSavedCourse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        type: "string"
+        in: "query"
+        format: "email"
+        description: "User email"
+      responses:
+        "200":
+          description: "Successful, returning status of each course"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CourseStatus"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Not Found"
+        "405":
+          description: "Invalid input"
+    post:
+      tags:
+      - "Savings"
+      summary: "Add a selected course for a user"
+      operationId: "addSelectedCourse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        type: "string"
+        in: "query"
+        required: true
+        format: "email"
+      - name: "subject"
+        type: "string"
+        in: "query"
+      - name: "number"
+        type: "integer"
+        in: "query"
+        required: true
+        format: "int32"
+        description: "Course number"
+      responses:
+        "200":
+          description: "Successful, returning status of each course or just impacted courses"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CourseStatus"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Not Found"
+        "405":
+          description: "Invalid input"
+    delete:
+      tags:
+      - "Savings"
+      summary: "Delete a selected course for a user"
+      description: "Remove the course record from the table Saving"
+      operationId: "deleteSelectedCourse"
+      parameters:
+      - name: "email"
+        type: "string"
+        in: "query"
+        required: true
+        format: "email"
+      - name: "subject"
+        type: "string"
+        in: "query"
+      - name: "number"
+        type: "integer"
+        in: "query"
+        required: true
+        format: "int32"
+        description: "Course number"
+      responses:
+        "200":
+          description: "Successfully removed, returning status of each course or just impacted courses"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/CourseStatus"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Not Found"
+          
+definitions:
+  Course:
+    type: "object"
+    required:
+    - "number"
+    - "subject"
+    properties:
+      number:
+        type: "integer"
+        format: "int32"
+      subject:
+        type: "string"
+  Professor:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+      quality:
+        type: "number"
+      diff:
+        type: "number"
+      rmp: 
+        type: "string"
+  CourseDetail:
+    type: "object"
+    required:
+    - "number"
+    - "subject"
+    - "name"
+    properties:
+      number:
+        type: "integer"
+        format: "int32"
+      subject:
+        type: "string"
+      name:
+        type: "string"
+      prereq:
+        type: "array"
+        items:
+          $ref: "#/definitions/Course"
+      freq:
+        type: "string"
+      professors:
+        type: "array"
+        items:
+          $ref: "#/definitions/Professor"
+  CourseStatus:
+    type: "object"
+    required:
+    - "number"
+    - "subject"
+    properties:
+      number:
+        type: "integer"
+        format: "int32"
+      subject:
+        type: "string"
+      status:
+        type: "string"
+        enum: ["selected", "able", "notable"]
