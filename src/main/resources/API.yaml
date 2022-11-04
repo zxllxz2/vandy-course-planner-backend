@@ -9,7 +9,7 @@ info:
   # license:
   #   name: "Apache 2.0"
   #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8080"
+host: "localhost:8081"
 basePath: "/vandy"
 tags:
 - name: "Courses"
@@ -19,10 +19,10 @@ tags:
 - name: "Savings"
   description: "Operations about users' saved versions"
 schemes:
-- "https"
+#- "https"
 - "http"
 paths:
-  /courses:
+  /courses/:
     get:
       tags:
       - "Courses"
@@ -51,7 +51,7 @@ paths:
           description: "Not Found"
         "405":
           description: "Invalid input"
-  /prereqs:
+  /prereqs/:
     get:
       tags:
       - "Prereqs"
@@ -83,7 +83,7 @@ paths:
           description: "Not Found"
         "405":
           description: "Invalid input"
-  /savings:
+  /savings/:
     get:
       tags:
       - "Savings"
