@@ -25,7 +25,7 @@
         <!--web dep -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!--lombok -->
         <dependency>
@@ -45,6 +45,12 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.2</version>
         </dependency>
+        <!--mybatisplus-plus-->
+        <dependency>
+            <groupId>com.github.jeffreyning</groupId>
+            <artifactId>mybatisplus-plus</artifactId>
+            <version>1.7.0-RELEASE</version>
+        </dependency>
         <!--test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,13 +59,13 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>

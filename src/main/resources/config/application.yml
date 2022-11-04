@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /vandy
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://db-instance1.cynbqh9ufuws.us-east-1.rds.amazonaws.com/vandy_course_planner
+    username: root
+    password: root_password
+    hikari:
+      pool-name: DateHikariCP
+      minimum-idle: 5
+      idle-timeout: 180000
+      maximum-pool-size: 10
+      auto-commit: true
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  type-aliases-package: edu.vanderbilt.vandycourseplanner.pojo
+  configuration:
+    map-underscore-to-camel-case: false
+
+
+logging:
+  level:
+    edu.vanderbilt.vandycourseplanner.mapper: debug

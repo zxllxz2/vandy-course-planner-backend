@@ -10,7 +10,7 @@ info:
   #   name: "Apache 2.0"
   #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "localhost:8080"
-basePath: "/"
+basePath: "/vandy"
 tags:
 - name: "Courses"
   description: "Operations about course infomation"
@@ -138,11 +138,12 @@ paths:
         description: "Course number"
       responses:
         "200":
-          description: "Successful, returning status of each course or just impacted courses"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CourseStatus"
+          description: "Successful"
+          # , returning status of each course or just impacted courses"
+          # schema:
+          #   type: "array"
+          #   items:
+          #     $ref: "#/definitions/CourseStatus"
         "401":
           description: "Unauthorized"
         "404":
@@ -172,11 +173,12 @@ paths:
         description: "Course number"
       responses:
         "200":
-          description: "Successfully removed, returning status of each course or just impacted courses"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CourseStatus"
+          description: "Successful"
+          # removed, returning status of each course or just impacted courses"
+          # schema:
+          #   type: "array"
+          #   items:
+          #     $ref: "#/definitions/CourseStatus"
         "401":
           description: "Unauthorized"
         "404":
