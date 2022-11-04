@@ -1,5 +1,6 @@
 package edu.vanderbilt.vandycourseplanner.service.impl;
 
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import edu.vanderbilt.vandycourseplanner.pojo.Prerequisite;
 import edu.vanderbilt.vandycourseplanner.mapper.PrerequisiteMapper;
 import edu.vanderbilt.vandycourseplanner.service.IPrerequisiteService;
@@ -13,6 +14,6 @@ import org.springframework.stereotype.Service;
  * @since 2022-11-04
  */
 @Service
-public class PrerequisiteServiceImpl extends ServiceImpl<PrerequisiteMapper, Prerequisite> implements IPrerequisiteService {
+public class PrerequisiteServiceImpl extends MppServiceImpl<PrerequisiteMapper, Prerequisite> implements IPrerequisiteService {
 
 }

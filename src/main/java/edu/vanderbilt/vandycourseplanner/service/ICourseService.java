@@ -1,7 +1,7 @@
 package edu.vanderbilt.vandycourseplanner.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
 import edu.vanderbilt.vandycourseplanner.pojo.Course;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * Course service
@@ -9,6 +9,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author Toby Zhu
  * @since 2022-11-04
  */
-public interface ICourseService extends IService<Course> {
+public interface ICourseService extends IMppService<Course> {
 
 }

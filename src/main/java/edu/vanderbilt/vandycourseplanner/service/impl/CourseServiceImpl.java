@@ -1,5 +1,6 @@
 package edu.vanderbilt.vandycourseplanner.service.impl;
 
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import edu.vanderbilt.vandycourseplanner.pojo.Course;
 import edu.vanderbilt.vandycourseplanner.mapper.CourseMapper;
 import edu.vanderbilt.vandycourseplanner.service.ICourseService;
@@ -13,6 +14,6 @@ import org.springframework.stereotype.Service;
  * @since 2022-11-04
  */
 @Service
-public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements ICourseService {
+public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> implements ICourseService {
 
 }
