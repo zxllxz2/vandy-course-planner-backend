@@ -9,7 +9,7 @@ info:
   # license:
   #   name: "Apache 2.0"
   #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8081"
+host: "localhost:8080"
 basePath: "/vandy"
 tags:
 - name: "Courses"
@@ -44,7 +44,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/CourseDetail"
+              $ref: "#/definitions/CourseLevel"
         "401":
           description: "Unauthorized"
         "404":
@@ -233,6 +233,22 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Professor"
+  CourseLevel:
+    type: "object"
+    required:
+      - "number"
+      - "subject"
+      - "courses"
+    properties:
+      number:
+        type: "integer"
+        format: :int32"
+      subject:
+        type: "string"
+      courses:
+        type: "array"
+        items:
+          $ref: "#/definitions/CourseDetail"
   CourseStatus:
     type: "object"
     required:
