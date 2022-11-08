@@ -24,7 +24,7 @@ public class SavingServiceImpl extends MppServiceImpl<SavingMapper, Saving> impl
     private SavingMapper savingMapper;
 
     @Override
-    public RespBean addOneSaving(String email, String subject, int number) {
+    public RespBean addOneSaving(String email, String subject, Integer number) {
         Saving saving = new Saving();
         saving.setEmail(email);
         saving.setSubject(subject);
@@ -41,5 +41,22 @@ public class SavingServiceImpl extends MppServiceImpl<SavingMapper, Saving> impl
             return RespBean.error("Fail to save course");
         }
 
+    }
+
+    @Override
+    public RespBean deleteOneSaving(String email, String subject, Integer number) {
+        Saving saving = new Saving();
+        saving.setEmail(email);
+        saving.setSubject(subject);
+        saving.setCourse_no(number);
+        if (savingMapper.selectByMultiId(saving) == null) {
+            return RespBean.error("User noT exist or course not saved");
+        }
+
+        if (savingMapper.deleteByMultiId(saving) == 1) {
+            return RespBean.success("Successfully deleted");
+        } else {
+            return RespBean.error("Fail to delete course");
+        }
     }
 }

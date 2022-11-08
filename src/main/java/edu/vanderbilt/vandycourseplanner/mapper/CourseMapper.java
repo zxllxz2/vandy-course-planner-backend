@@ -4,6 +4,8 @@ import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import edu.vanderbilt.vandycourseplanner.pojo.Course;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  *  Mapper API
  *
@@ -13,4 +15,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CourseMapper extends MppBaseMapper<Course> {
 
+    /**
+     * Get the detailed course list by indicating the level
+     * @param level
+     * @return
+     */
+    List<Course> getCoursesByLevel(Integer level);
 }
