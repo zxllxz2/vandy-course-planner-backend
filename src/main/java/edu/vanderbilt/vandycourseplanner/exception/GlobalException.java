@@ -13,11 +13,11 @@ import java.sql.SQLIntegrityConstraintViolationException;
 @RestControllerAdvice
 public class GlobalException {
 
-    @ExceptionHandler(SQLException.class)
-    public RespBean mySqlException(SQLException e) {
-        if (e instanceof SQLIntegrityConstraintViolationException) {
-            return RespBean.error("The data has other connections. Fail to operate");
-        }
-        return RespBean.error("Error in the database. Fail to operate");
-    }
+//    @ExceptionHandler(SQLException.class)
+//    public RespBean mySqlException(SQLException e) {
+//        if (e instanceof SQLIntegrityConstraintViolationException) {
+//            return RespBean.error("The data has other connections. Fail to operate");
+//        }
+//        return RespBean.error("Error in the database. Fail to operate");
+//    }
 }

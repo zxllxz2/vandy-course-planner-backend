@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -29,10 +31,10 @@ public class Professor implements Serializable {
     private String Name;
 
     @TableField("Over_rate")
-    private double Over_rate;
+    private BigDecimal Over_rate;
 
     @TableField("Diff_rate")
-    private double Diff_rate;
+    private BigDecimal Diff_rate;
 
 
 }

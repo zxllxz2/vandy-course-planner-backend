@@ -25,7 +25,7 @@ public class CourseController {
     private ICourseService courseService;
 
     @GetMapping("/")
-    public List<Course> getCoursesByLevel(@RequestParam Integer level) {
+    public List<Course> getCoursesByLevel(@RequestParam(required = false) Integer level) {
         return courseService.getCoursesByLevel(level);
     }
 
