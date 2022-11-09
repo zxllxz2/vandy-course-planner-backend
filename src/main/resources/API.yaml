@@ -3,7 +3,6 @@ info:
   description: "This is the API documentation v1.0.0 of the project Vandy Course Planner."
   version: "1.0.0"
   title: "Vandy Course Planner"
-  # termsOfService: "http://swagger.io/terms/"
   contact:
     email: "xiaoliang.zhu@vanderbilt.edu"
   # license:
@@ -12,32 +11,32 @@ info:
 host: "localhost:8080"
 basePath: "/vandy"
 tags:
-- name: "Courses"
-  description: "Operations about course infomation"
-- name: "Prereqs"
-  description: "Operations about course prerequisite and hierarchy"
-- name: "Savings"
-  description: "Operations about users' saved versions"
+  - name: "Courses"
+    description: "Operations about course infomation"
+  - name: "Prereqs"
+    description: "Operations about course prerequisite and hierarchy"
+  - name: "Savings"
+    description: "Operations about users' saved versions"
 schemes:
-#- "https"
-- "http"
+  #- "https"
+  - "http"
 paths:
   /courses/:
     get:
       tags:
-      - "Courses"
+        - "Courses"
       summary: "Get all course infomation given level"
       operationId: "getAllCourse"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "level"
-        type: "integer"
-        in: "query"
-        enum: [1,2,3,4]
-        description: "Course level for searching; empty to search for all"
+        - name: "level"
+          type: "integer"
+          in: "query"
+          enum: [1,2,3,4]
+          description: "Course level for searching; empty to search for all"
       responses:
         "200":
           description: "Successful"
@@ -54,22 +53,22 @@ paths:
   /prereqs/:
     get:
       tags:
-      - "Prereqs"
+        - "Prereqs"
       summary: "Get all course status given selected courses"
       operationId: "getAllCourseStatus"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Array of selected courses"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/Course"
+        - in: "body"
+          name: "body"
+          description: "Array of selected courses"
+          required: true
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Course"
       responses:
         "200":
           description: "Successful, returning status of each course"
@@ -86,19 +85,19 @@ paths:
   /savings/:
     get:
       tags:
-      - "Savings"
+        - "Savings"
       summary: "Get all saved courses of a user"
       operationId: "getAllSavedCourse"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "email"
-        type: "string"
-        in: "query"
-        format: "email"
-        description: "User email"
+        - name: "email"
+          type: "string"
+          in: "query"
+          format: "email"
+          description: "User email"
       responses:
         "200":
           description: "Successful, returning status of each course"
@@ -114,36 +113,33 @@ paths:
           description: "Invalid input"
     post:
       tags:
-      - "Savings"
+        - "Savings"
       summary: "Add a selected course for a user"
       operationId: "addSelectedCourse"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "email"
-        type: "string"
-        in: "query"
-        required: true
-        format: "email"
-      - name: "subject"
-        type: "string"
-        in: "query"
-      - name: "number"
-        type: "integer"
-        in: "query"
-        required: true
-        format: "int32"
-        description: "Course number"
+        - name: "email"
+          type: "string"
+          in: "query"
+          required: true
+          format: "email"
+        - name: "subject"
+          type: "string"
+          in: "query"
+        - name: "number"
+          type: "integer"
+          in: "query"
+          required: true
+          format: "int32"
+          description: "Course number"
       responses:
         "200":
           description: "Successful"
-          # , returning status of each course or just impacted courses"
-          # schema:
-          #   type: "array"
-          #   items:
-          #     $ref: "#/definitions/CourseStatus"
+          schema:
+            $ref: "#/definitions/ResponseBean"
         "401":
           description: "Unauthorized"
         "404":
@@ -152,44 +148,41 @@ paths:
           description: "Invalid input"
     delete:
       tags:
-      - "Savings"
+        - "Savings"
       summary: "Delete a selected course for a user"
       description: "Remove the course record from the table Saving"
       operationId: "deleteSelectedCourse"
       parameters:
-      - name: "email"
-        type: "string"
-        in: "query"
-        required: true
-        format: "email"
-      - name: "subject"
-        type: "string"
-        in: "query"
-      - name: "number"
-        type: "integer"
-        in: "query"
-        required: true
-        format: "int32"
-        description: "Course number"
+        - name: "email"
+          type: "string"
+          in: "query"
+          required: true
+          format: "email"
+        - name: "subject"
+          type: "string"
+          in: "query"
+        - name: "number"
+          type: "integer"
+          in: "query"
+          required: true
+          format: "int32"
+          description: "Course number"
       responses:
         "200":
           description: "Successful"
-          # removed, returning status of each course or just impacted courses"
-          # schema:
-          #   type: "array"
-          #   items:
-          #     $ref: "#/definitions/CourseStatus"
+          schema:
+            $ref: "#/definitions/ResponseBean"
         "401":
           description: "Unauthorized"
         "404":
           description: "Not Found"
-          
+
 definitions:
   Course:
     type: "object"
     required:
-    - "number"
-    - "subject"
+      - "number"
+      - "subject"
     properties:
       number:
         type: "integer"
@@ -199,22 +192,22 @@ definitions:
   Professor:
     type: "object"
     required:
-    - "name"
+      - "name"
     properties:
       name:
         type: "string"
-      quality:
+      over_rate:
         type: "number"
-      diff:
+      diff_rate:
         type: "number"
-      rmp: 
+      tid:
         type: "string"
   CourseDetail:
     type: "object"
     required:
-    - "number"
-    - "subject"
-    - "name"
+      - "number"
+      - "subject"
+      - "name"
     properties:
       number:
         type: "integer"
@@ -223,11 +216,20 @@ definitions:
         type: "string"
       name:
         type: "string"
-      prereq:
+      # The list of prerequisites. The index 0 list is the "can't take" courses
+      prereqs:
+        type: "array"
+        items:
+          type: "array"
+          items:
+            type: "string"
+          example: ["CS 1101", "CS 2201"]
+      # The raw list of prerequsites; for testing purpose
+      prerequisites:
         type: "array"
         items:
           $ref: "#/definitions/Course"
-      freq:
+      frequency:
         type: "string"
       professors:
         type: "array"
@@ -236,8 +238,8 @@ definitions:
   CourseStatus:
     type: "object"
     required:
-    - "number"
-    - "subject"
+      - "number"
+      - "subject"
     properties:
       number:
         type: "integer"
@@ -247,3 +249,16 @@ definitions:
       status:
         type: "string"
         enum: ["selected", "able", "notable"]
+  ResponseBean:
+    type: "object"
+    required:
+      - "code"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+        example: 200
+      message:
+        type: "string"
+      object:
+        type: "object"

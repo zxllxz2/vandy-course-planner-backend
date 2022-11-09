@@ -18,6 +18,6 @@ public interface ICourseService extends IMppService<Course> {
      * @param level - 1, or 2, or 3, or 4, or null
      * @return
      */
-    public List<Course> getCoursesByLevel(Integer level);
+    List<Course> getCoursesByLevel(Integer level);
 
 }

@@ -1,18 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="edu.vanderbilt.mapper.CourseMapper">
+<mapper namespace="edu.vanderbilt.vandycourseplanner.mapper.CourseMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="edu.vanderbilt.vandycourseplanner.pojo.Course">
         <id column="Number" property="Number" />
-        <result column="Subject" property="Subject" />
+        <id column="Subject" property="Subject" />
         <result column="Name" property="Name" />
         <result column="Frequency" property="Frequency" />
+    </resultMap>
+    
+    <resultMap id="FullCourseDetail" type="edu.vanderbilt.vandycourseplanner.pojo.Course"
+               extends="BaseResultMap">
+        <collection property="professors"
+                    ofType="edu.vanderbilt.vandycourseplanner.pojo.Professor">
+            <id column="Tid" property="Tid" />
+            <result column="ProfName" property="Name" />
+            <result column="Over_rate" property="Over_rate"/>
+            <result column="Diff_rate" property="Diff_rate"/>
+        </collection>
+        <collection property="prerequisites"
+                    ofType="edu.vanderbilt.vandycourseplanner.pojo.Prerequisite">
+            <id column="Pre_subject" property="Pre_subject"/>
+            <id column="Pre_course_no" property="Pre_course_no"/>
+            <result column="Level" property="Level"/>
+        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         Number, Subject, Name, Frequency
     </sql>
+
+    <select id="getCoursesByLevel" resultMap="FullCourseDetail">
+        SELECT DISTINCT MOD(temp.Number, 10000) AS Number,
+                        temp.Subject,
+                        temp.Name,
+                        temp.Frequency,
+                        temp.Pre_subject,
+                        temp.Pre_course_no,
+                        temp.Level,
+                        p.Tid AS Tid,
+                        p.Name AS ProfName,
+                        p.Over_rate AS Over_rate,
+                        p.Diff_rate AS Diff_rate
+        FROM Professor p,
+             Teaching t,
+             (SELECT DISTINCT c.*,
+                              pre.Pre_subject,
+                              pre.Pre_course_no,
+                              pre.Level
+             FROM Course c
+                 LEFT JOIN Prerequisite pre
+                     ON c.Subject = pre.Subject and c.Number = pre.Course_no
+            <if test="level != null">
+                WHERE (c.Number % 10000) >= (#{level} * 1000)
+                  AND ((#{level}+1) * 1000) > (c.Number % 10000)
+            </if>
+            ) AS temp
+        WHERE temp.Subject = t.Subject and temp.Number = t.Course_no and p.Tid = t.Tid
+        ORDER BY temp.Number, temp.Level;
+    </select>
 
 </mapper>
