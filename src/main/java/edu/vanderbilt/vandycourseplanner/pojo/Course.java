@@ -3,6 +3,7 @@ package edu.vanderbilt.vandycourseplanner.pojo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.List;
 
 import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.Data;
@@ -37,5 +38,10 @@ public class Course implements Serializable {
     @TableField("Frequency")
     private String Frequency;
 
+    @TableField(exist = false)
+    private List<Professor> professors;
+
+    @TableField(exist = false)
+    private List<Prerequisite> prereqs;
 
 }

@@ -5,7 +5,10 @@ import edu.vanderbilt.vandycourseplanner.pojo.Course;
 import edu.vanderbilt.vandycourseplanner.mapper.CourseMapper;
 import edu.vanderbilt.vandycourseplanner.service.ICourseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Course service impl
@@ -16,4 +19,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> implements ICourseService {
 
+    @Autowired
+    private CourseMapper courseMapper;
+
+    @Override
+    public List<Course> getCoursesByLevel(Integer level) {
+        courseMapper.getCoursesByLevel(level);
+        return null;
+    }
 }

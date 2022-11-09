@@ -3,11 +3,9 @@ package edu.vanderbilt.vandycourseplanner.controller;
 
 import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
 import edu.vanderbilt.vandycourseplanner.service.ISavingService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -22,8 +20,18 @@ public class SavingController {
     private ISavingService savingService;
 
     @PostMapping("/")
-    public RespBean addOneSaving(String email, String subject, int number) {
+    public RespBean addOneSaving(@NotNull @RequestParam String email,
+                                 @RequestParam(defaultValue = "CS") String subject,
+                                 @NotNull @RequestParam Integer number) {
         return savingService.addOneSaving(email, subject, number);
+    }
+
+    @CrossOrigin
+    @DeleteMapping("/")
+    public RespBean deleteOneSaving(@NotNull @RequestParam String email,
+                                    @RequestParam(defaultValue = "CS") String subject,
+                                    @NotNull @RequestParam Integer number) {
+        return savingService.deleteOneSaving(email, subject, number);
     }
 
 }

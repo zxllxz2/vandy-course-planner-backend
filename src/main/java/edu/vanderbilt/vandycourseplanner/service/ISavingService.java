@@ -20,6 +20,14 @@ public interface ISavingService extends IMppService<Saving> {
      * @param number
      * @return
      */
-    RespBean addOneSaving(String email, String subject, int number);
+    RespBean addOneSaving(String email, String subject, Integer number);
 
+    /**
+     * Delete one user saved course selection
+     * @param email
+     * @param subject
+     * @param number
+     * @return
+     */
+    RespBean deleteOneSaving(String email, String subject, Integer number);
 }
