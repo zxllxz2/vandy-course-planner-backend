@@ -21,4 +21,6 @@ public interface CourseMapper extends MppBaseMapper<Course> {
      * @return
      */
     List<Course> getCoursesByLevel(Integer level);
+
+    Course getCourseBySubjectAndNumber(String subject, Integer number);
 }
