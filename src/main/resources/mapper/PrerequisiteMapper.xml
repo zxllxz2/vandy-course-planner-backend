@@ -18,7 +18,10 @@
 
     <select id="getPrereqsByCourseSubjectAndNumber" resultMap="BaseResultMap">
         SELECT * FROM Prerequisite pre WHERE
-        #{subject} = pre.Subject and #{number} = pre.Course_no ORDER BY Level
+        (#{subject} = pre.Subject AND #{number} = pre.Course_no)
+        OR
+        (#{subject} =  pre.Pre_subject AND #{number}=pre.Pre_course_no AND pre.Level=0)
+        ORDER BY Level
     </select>
 
 </mapper>

@@ -128,6 +128,9 @@ public class PrerequisiteServiceImpl extends MppServiceImpl<PrerequisiteMapper, 
                     }
                 }
             }
+            if(theLevelSatisfied){
+                thisStatus.setStatus("able");
+            }
             allStatus.add(thisStatus);
 
         }
