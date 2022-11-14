@@ -4,6 +4,8 @@ import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import edu.vanderbilt.vandycourseplanner.pojo.Prerequisite;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  *  Mapper API
  *
@@ -12,5 +14,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PrerequisiteMapper extends MppBaseMapper<Prerequisite> {
-
+    List<Prerequisite> getPrereqsByCourseSubjectAndNumber(String subject, Integer number);
 }

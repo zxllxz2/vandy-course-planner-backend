@@ -1,9 +1,14 @@
 package edu.vanderbilt.vandycourseplanner.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import edu.vanderbilt.vandycourseplanner.domain.CourseRequest;
+import edu.vanderbilt.vandycourseplanner.pojo.Course;
+import edu.vanderbilt.vandycourseplanner.domain.CourseStatusResponse;
+import edu.vanderbilt.vandycourseplanner.service.IPrerequisiteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  *
@@ -14,4 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/prereqs")
 public class PrerequisiteController {
 
+    @Autowired
+    private IPrerequisiteService prerequisiteService;
+
+    @GetMapping("/")
+    public List<CourseStatusResponse> getPrereqs(@RequestBody List<CourseRequest> courses) {
+        return prerequisiteService.getPrereqs(courses);
+    }
 }

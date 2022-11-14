@@ -32,6 +32,10 @@
         Number, Subject, Name, Frequency
     </sql>
 
+    <select id="getCourseBySubjectAndNumber" resultMap="BaseResultMap">
+        SELECT * FROM Course c WHERE #{subject} = c.Subject AND #{number}=c.Number
+    </select>
+
     <select id="getCoursesByLevel" resultMap="FullCourseDetail">
         SELECT DISTINCT MOD(temp.Number, 10000) AS Number,
                         temp.Subject,
