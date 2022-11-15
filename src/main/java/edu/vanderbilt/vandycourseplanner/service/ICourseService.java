@@ -2,6 +2,9 @@ package edu.vanderbilt.vandycourseplanner.service;
 
 import com.github.jeffreyning.mybatisplus.service.IMppService;
 import edu.vanderbilt.vandycourseplanner.pojo.Course;
+import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,4 +23,19 @@ public interface ICourseService extends IMppService<Course> {
      */
     List<Course> getCoursesByLevel(Integer level);
 
+    /**
+     * Check the major requirement portion that a course satisfies
+     * @param subject
+     * @param number
+     * @return
+     */
+    RespBean classifyCourse(String subject, Integer number);
+
+    /**
+     * Check if the selected courses satisfy the major requirement
+     * @param courses
+     * @param requirement
+     * @return
+     */
+    RespBean isSatisfied(List<Course> courses, String requirement);
 }
