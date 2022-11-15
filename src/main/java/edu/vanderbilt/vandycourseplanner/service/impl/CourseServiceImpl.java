@@ -1,6 +1,7 @@
 package edu.vanderbilt.vandycourseplanner.service.impl;
 
 import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
+import edu.vanderbilt.vandycourseplanner.domain.CourseRequest;
 import edu.vanderbilt.vandycourseplanner.pojo.Course;
 import edu.vanderbilt.vandycourseplanner.mapper.CourseMapper;
 import edu.vanderbilt.vandycourseplanner.pojo.Prerequisite;
@@ -8,6 +9,7 @@ import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
 import edu.vanderbilt.vandycourseplanner.service.ICourseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,18 +26,26 @@ public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> impl
     @Autowired
     private CourseMapper courseMapper;
 
-    private final HashSet<String> softwarePartial =
-            new HashSet<>(Arrays.asList("cs2201", "cs3251", "cs3270"));
-    private final HashSet<String> hardware = new HashSet<>(Arrays.asList("eece2123", "cs3281"));
-    private final HashSet<String> foundation = new HashSet<>(Arrays.asList("cs2212", "cs3250"));
-    private final HashSet<String> project =
-            new HashSet<>(Arrays.asList("cs3259", "cs123892", "cs143892", "cs4249"
-            , "cs4269", "cs4279", "cs4287"));
-    private final String seminar = "cs4959";
-    private final HashSet<String> depthEece = new HashSet<>(Arrays.asList("eece4353", "eece4354"
-            , "eece4376"));
-    private final HashSet<String> depthMath = new HashSet<>(Arrays.asList("math3320", "math3620",
-            "math4600", "math4620"));
+    @Value("${constants.software-highlevel}")
+    private  HashSet<String> softwarePartial;
+
+    @Value("${constants.hardware}")
+    private HashSet<String> hardware;
+
+    @Value("${constants.foundation}")
+    private HashSet<String> foundation;
+
+    @Value("${constants.project}")
+    private HashSet<String> project;
+
+    @Value("${constants.seminar}")
+    private String seminar;
+
+    @Value("${constants.depth-eece}")
+    private HashSet<String> depthEece;
+
+    @Value("${constants.depth-math}")
+    private HashSet<String> depthMath;
 
     @Override
     public List<Course> getCoursesByLevel(Integer level) {
@@ -70,7 +80,7 @@ public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> impl
             // Every list, starting from index 1, must have >= 1 course satisfied as prereq
             for (int i = 1; i < prerequisiteList.size(); ++i) {
                 if (!Objects.equals(prerequisiteList.get(i).getLevel(),
-                        prerequisiteList.get(i-1).getLevel())) {
+                        prerequisiteList.get(i - 1).getLevel())) {
                     prereqs.add(new ArrayList<>(levelZero));
                     levelZero.clear();
                 }
@@ -87,6 +97,11 @@ public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> impl
 
     @Override
     public RespBean classifyCourse(String subject, Integer number) {
+
+        if (courseMapper.getCourseBySubjectAndNumber(subject, number) == null) {
+            return RespBean.error("No such course exists");
+        }
+
         String requirement = null;
         String target = subject.toLowerCase() + number.toString();
         if (target.equals("cs1101") || target.equals("cs1104") || softwarePartial.contains(target)) {
@@ -109,48 +124,47 @@ public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> impl
     }
 
     @Override
-    public RespBean isSatisfied(List<Course> courses, String requirement) {
-        Boolean satisfied = false;
+    public RespBean isSatisfied(List<CourseRequest> courses) {
+        Map<String, Boolean> satisfied = new HashMap<>();
         HashSet<String> set = new HashSet<>();
 
-        for (Course course : courses) {
-            set.add(course.getSubject().toLowerCase() + course.getNumber().toString());
+        for (CourseRequest course : courses) {
+            set.add(course.getSubject().toLowerCase() + course.getCourse_no());
         }
 
-        switch (requirement.toLowerCase()) {
-            case "software":
-                satisfied = (set.contains("cs1101") || set.contains("cs1104"))
-                            && set.containsAll(softwarePartial);
-                break;
-            case "hardware":
-                satisfied = set.containsAll(hardware);
-                break;
-            case "foundation":
-                satisfied = set.containsAll(foundation);
-                break;
-            case "project":
-                satisfied = set.containsAll(project);
-                break;
-            case "seminar":
-                satisfied = set.contains(seminar);
-                break;
-            case "depth":
-                int count = ((int) courses
-                        .stream()
-                        .filter(c -> c.getSubject().equalsIgnoreCase("cs")
-                                && c.getNumber() >= 3000
-                                && c.getNumber() != 3262)
-                        .count());
-                if (count < 4) {
-                    HashSet<String> tempEece = new HashSet<>(depthEece);
-                    HashSet<String> tempMath = new HashSet<>(depthMath);
-                    tempEece.retainAll(set);
-                    tempMath.retainAll(set);
-                    count += tempMath.size() > 2 ? tempEece.size() + 2 :
-                            tempEece.size() + tempMath.size();
-                }
-                satisfied = count >= 4;
+        satisfied.put("software", (set.contains("cs1101") || set.contains("cs1104"))
+                && set.containsAll(softwarePartial));
+        satisfied.put("hardware", set.containsAll(hardware));
+        satisfied.put("foundation", set.containsAll(foundation));
+        satisfied.put("seminar", set.contains(seminar));
+
+        set.retainAll(project);
+        satisfied.put("project", !set.isEmpty());
+        String oneProject = set.isEmpty() ? null : set.toArray()[0].toString();
+
+        int count = ((int) courses
+                .stream()
+                .filter(c -> {
+                    String t = c.getSubject().toLowerCase() + c.getCourse_no();
+                    return c.getSubject().equalsIgnoreCase("cs")
+                            && !softwarePartial.contains(t)
+                            && !hardware.contains(t)
+                            && !foundation.contains(t)
+                            && !t.equals(oneProject)
+                            && !t.equals(seminar)
+                            && c.getCourse_no() >= 3000
+                            && c.getCourse_no() != 3262;
+                })
+                .count());
+        if (count < 4) {
+            HashSet<String> tempEece = new HashSet<>(depthEece);
+            HashSet<String> tempMath = new HashSet<>(depthMath);
+            tempEece.retainAll(set);
+            tempMath.retainAll(set);
+            count += tempMath.size() > 2 ? tempEece.size() + 2 :
+                    tempEece.size() + tempMath.size();
         }
+        satisfied.put("depth", count >= 4);
         return RespBean.success(null, satisfied);
     }
 }

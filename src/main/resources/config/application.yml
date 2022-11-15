@@ -30,3 +30,12 @@ mybatis-plus:
 logging:
   level:
     edu.vanderbilt.vandycourseplanner.mapper: debug
+
+constants:
+  software-highlevel: cs2201, cs3251, cs3270
+  hardware: eece2123, cs3281
+  foundation: cs2212, cs3250
+  project: cs3259, cs123892, cs143892, cs4249, cs4269, cs4279, cs4287
+  depth-eece: eece4353, eece4354, eece4376
+  depth-math: math3320, math3620, math4600, math4620
+  seminar: cs4959

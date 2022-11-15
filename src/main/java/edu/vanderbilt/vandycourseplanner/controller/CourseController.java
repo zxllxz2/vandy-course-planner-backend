@@ -1,6 +1,7 @@
 package edu.vanderbilt.vandycourseplanner.controller;
 
 
+import edu.vanderbilt.vandycourseplanner.domain.CourseRequest;
 import edu.vanderbilt.vandycourseplanner.pojo.Course;
 import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
 import edu.vanderbilt.vandycourseplanner.service.ICourseService;
@@ -22,8 +23,8 @@ public class CourseController {
     private ICourseService courseService;
 
     @GetMapping("/")
-    public List<Course> getCoursesByLevel(@RequestParam(required = false) Integer level) {
-        return courseService.getCoursesByLevel(level);
+    public RespBean getCoursesByLevel(@RequestParam(required = false) Integer level) {
+        return RespBean.success(null, courseService.getCoursesByLevel(level));
     }
 
     @GetMapping("/classify")
@@ -32,10 +33,9 @@ public class CourseController {
         return courseService.classifyCourse(subject, number);
     }
 
-    @GetMapping("/satisfy")
-    public RespBean isSatisfied(@RequestBody List<Course> courses,
-                                @RequestParam String requirement) {
-        return courseService.isSatisfied(courses, requirement);
+    @PostMapping("/satisfy")
+    public RespBean isSatisfied(@RequestBody List<CourseRequest> courses) {
+        return courseService.isSatisfied(courses);
     }
 
 }

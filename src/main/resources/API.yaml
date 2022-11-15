@@ -50,8 +50,84 @@ paths:
           description: "Not Found"
         "405":
           description: "Invalid input"
-  /prereqs/:
+  /courses/classify:
     get:
+      tags:
+        - "Courses"
+      summary: "Check the major requirement category of a course"
+      operationId: "classifyCourse"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "subject"
+          type: "string"
+          in: "query"
+          required: true
+          description: "Course subject"
+        - name: "number"
+          type: "integer"
+          in: "query"
+          required: true
+          description: "Course number"
+      responses:
+        "200":
+          description: "Successful"
+          schema:
+            type: "string"
+            example: "project"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Not Found"
+        "405":
+          description: "Invalid input"
+  /courses/satisfy:
+    post:
+      tags:
+        - "Courses"
+      summary: "Check if a major requirement category is satisfied given selected courses"
+      operationId: "isSatisfied"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Array of selected courses"
+          required: true
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Course"
+      responses:
+        "200":
+          description: "Successful"
+          schema:
+            type: "object"
+            properties:
+              software:
+                type: "boolean"
+              hardware:
+                type: "boolean"
+              depth:
+                type: "boolean"
+              seminar:
+                type: "boolean"
+              project:
+                type: "boolean"
+              foundation:
+                type: "boolean"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Not Found"
+        "405":
+          description: "Invalid input"
+  /prereqs/:
+    post:
       tags:
         - "Prereqs"
       summary: "Get all course status given selected courses"
@@ -96,6 +172,7 @@ paths:
         - name: "email"
           type: "string"
           in: "query"
+          required: true
           format: "email"
           description: "User email"
       responses:
@@ -139,13 +216,17 @@ paths:
         "200":
           description: "Successful"
           schema:
-            $ref: "#/definitions/ResponseBean"
+            type: "string"
+            example: "Successfully deleted"
         "401":
           description: "Unauthorized"
         "404":
           description: "Not Found"
-        "405":
-          description: "Invalid input"
+        "500":
+          description: "Failure"
+          schema:
+            type: "string"
+            example: "Fail to delete course"
     delete:
       tags:
         - "Savings"
@@ -171,23 +252,28 @@ paths:
         "200":
           description: "Successful"
           schema:
-            $ref: "#/definitions/ResponseBean"
+            type: "string"
+            example: "Successfully saved"
         "401":
           description: "Unauthorized"
         "404":
           description: "Not Found"
-
+        "500":
+          description: "Failure"
+          schema:
+            type: "string"
+            example: "Fail to save course"
 definitions:
   Course:
     type: "object"
     required:
-      - "number"
-      - "subject"
+      - "Course_no"
+      - "Subject"
     properties:
-      number:
+      Course_no:
         type: "integer"
         format: "int32"
-      subject:
+      Subject:
         type: "string"
   Professor:
     type: "object"
@@ -249,16 +335,16 @@ definitions:
       status:
         type: "string"
         enum: ["selected", "able", "notable"]
-  ResponseBean:
-    type: "object"
-    required:
-      - "code"
-    properties:
-      code:
-        type: "integer"
-        format: "int32"
-        example: 200
-      message:
-        type: "string"
-      object:
-        type: "object"
+  # ResponseBean:
+  #   type: "object"
+  #   required:
+  #     - "code"
+  #   properties:
+  #     code:
+  #       type: "integer"
+  #       format: "int32"
+  #       example: 200
+  #     message:
+  #       type: "string"
+  #     object:
+  #       type: "object"
