@@ -1,9 +1,12 @@
 package edu.vanderbilt.vandycourseplanner.service;
 
 import com.github.jeffreyning.mybatisplus.service.IMppService;
+import edu.vanderbilt.vandycourseplanner.domain.CourseStatusResponse;
 import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
 import edu.vanderbilt.vandycourseplanner.pojo.Saving;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * Saving service
@@ -12,6 +15,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-11-04
  */
 public interface ISavingService extends IMppService<Saving> {
+
+    /**
+     * Get all saved courses of a user and the status of every course
+     * @param email
+     * @return
+     */
+    List<CourseStatusResponse> getSavingByUser(String email);
 
     /**
      * Add one user saved course selection

@@ -19,6 +19,11 @@ public class SavingController {
     @Autowired
     private ISavingService savingService;
 
+    @GetMapping("/")
+    public RespBean getSavingByUser(@RequestParam String email) {
+        return RespBean.success(null, savingService.getSavingByUser(email));
+    }
+
     @PostMapping("/")
     public RespBean addOneSaving(@NotNull @RequestParam String email,
                                  @RequestParam(defaultValue = "CS") String subject,

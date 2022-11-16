@@ -6,6 +6,7 @@ server:
 
 spring:
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://db-instance1.cynbqh9ufuws.us-east-1.rds.amazonaws.com/vandy_course_planner
     username: root
     password: root_password
@@ -18,10 +19,11 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 30000
       connection-test-query: SELECT 1
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
 
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/*Mapper.xml
+  mapper-locations: classpath:/mapper/*Mapper.xml
   type-aliases-package: edu.vanderbilt.vandycourseplanner.pojo
   configuration:
     map-underscore-to-camel-case: false
@@ -30,3 +32,12 @@ mybatis-plus:
 logging:
   level:
     edu.vanderbilt.vandycourseplanner.mapper: debug
+
+constants:
+  software-highlevel: cs2201, cs3251, cs3270
+  hardware: eece2123, cs3281
+  foundation: cs2212, cs3250
+  project: cs3259, cs123892, cs143892, cs4249, cs4269, cs4279, cs4287
+  depth-eece: eece4353, eece4354, eece4376
+  depth-math: math3320, math3620, math4600, math4620
+  seminar: cs4959

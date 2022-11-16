@@ -1,14 +1,12 @@
 package edu.vanderbilt.vandycourseplanner.controller;
 
 
+import edu.vanderbilt.vandycourseplanner.domain.CourseRequest;
 import edu.vanderbilt.vandycourseplanner.pojo.Course;
+import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
 import edu.vanderbilt.vandycourseplanner.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,8 +23,19 @@ public class CourseController {
     private ICourseService courseService;
 
     @GetMapping("/")
-    public List<Course> getCoursesByLevel(@RequestParam(required = false) Integer level) {
-        return courseService.getCoursesByLevel(level);
+    public RespBean getCoursesByLevel(@RequestParam(required = false) Integer level) {
+        return RespBean.success(null, courseService.getCoursesByLevel(level));
+    }
+
+    @GetMapping("/classify")
+    public RespBean classifyCourse(@RequestParam String subject,
+                                   @RequestParam Integer number) {
+        return courseService.classifyCourse(subject, number);
+    }
+
+    @PostMapping("/satisfy")
+    public RespBean isSatisfied(@RequestBody List<CourseRequest> courses) {
+        return courseService.isSatisfied(courses);
     }
 
 }

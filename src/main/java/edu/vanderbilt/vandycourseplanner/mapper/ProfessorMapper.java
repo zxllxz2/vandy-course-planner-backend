@@ -1,7 +1,7 @@
 package edu.vanderbilt.vandycourseplanner.mapper;
 
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import edu.vanderbilt.vandycourseplanner.pojo.Professor;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2022-11-04
  */
 @Mapper
-public interface ProfessorMapper extends BaseMapper<Professor> {
+public interface ProfessorMapper extends MppBaseMapper<Professor> {
 
 }
