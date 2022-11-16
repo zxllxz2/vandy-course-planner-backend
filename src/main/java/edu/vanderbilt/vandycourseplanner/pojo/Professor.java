@@ -1,11 +1,11 @@
 package edu.vanderbilt.vandycourseplanner.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -23,7 +23,8 @@ public class Professor implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "Tid")
+    @MppMultiId
+    @TableField(value = "Tid")
     private Integer Tid;
 
     @NonNull

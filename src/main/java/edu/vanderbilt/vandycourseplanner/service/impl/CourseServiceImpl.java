@@ -27,7 +27,7 @@ public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> impl
     private CourseMapper courseMapper;
 
     @Value("${constants.software-highlevel}")
-    private  HashSet<String> softwarePartial;
+    private HashSet<String> softwarePartial;
 
     @Value("${constants.hardware}")
     private HashSet<String> hardware;
