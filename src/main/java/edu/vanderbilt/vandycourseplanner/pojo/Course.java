@@ -47,4 +47,7 @@ public class Course implements Serializable {
     @TableField(exist = false)
     private List<List<String>> prereqs;
 
+    @TableField(exist = false)
+    private List<String> coreqs;
+
 }
