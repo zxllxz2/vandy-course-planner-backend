@@ -24,4 +24,16 @@
         ORDER BY Level
     </select>
 
+    <select id="getCourseLevelZero" resultMap="BaseResultMap">
+        SELECT DISTINCT Pre_subject,
+                        Pre_course_no
+        FROM Prerequisite
+        WHERE
+          <foreach item="item" index="index" collection="courses"
+                   open="(Subject, Course_no) in (" separator="," close=")" nullable="true">
+            (#{item.Subject}, #{item.Course_no})
+          </foreach>
+          AND Level=0;
+    </select>
+
 </mapper>

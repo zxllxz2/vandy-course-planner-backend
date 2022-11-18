@@ -27,7 +27,6 @@ public class Professor implements Serializable {
     @TableField(value = "Tid")
     private Integer Tid;
 
-    @NonNull
     @TableField("Name")
     private String Name;
 

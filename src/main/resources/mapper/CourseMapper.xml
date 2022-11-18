@@ -13,12 +13,24 @@
     <resultMap id="FullCourseDetail" type="edu.vanderbilt.vandycourseplanner.pojo.Course"
                extends="BaseResultMap">
         <collection property="professors"
+                    javaType="java.util.List"
                     ofType="edu.vanderbilt.vandycourseplanner.pojo.Professor">
             <id column="Tid" property="Tid" />
-            <result column="ProfName" property="Name" />
+            <result column="ProfName" jdbcType="VARCHAR" property="Name" />
             <result column="Over_rate" property="Over_rate"/>
             <result column="Diff_rate" property="Diff_rate"/>
         </collection>
+        <collection property="prerequisites"
+                    javaType="java.util.List"
+                    ofType="edu.vanderbilt.vandycourseplanner.pojo.Prerequisite">
+            <id column="Pre_subject" property="Pre_subject"/>
+            <id column="Pre_course_no" property="Pre_course_no"/>
+            <result column="Level" property="Level"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="CoursePrereqs" type="edu.vanderbilt.vandycourseplanner.pojo.Course"
+               extends="BaseResultMap">
         <collection property="prerequisites"
                     ofType="edu.vanderbilt.vandycourseplanner.pojo.Prerequisite">
             <id column="Pre_subject" property="Pre_subject"/>
@@ -36,34 +48,47 @@
         SELECT * FROM Course c WHERE #{subject} = c.Subject AND #{number}=c.Number
     </select>
 
+    <select id="getAllCourseWithPrereqs" resultMap="CoursePrereqs">
+        SELECT c.Subject,
+               c.Number,
+               c.Name,
+               pre.Pre_subject,
+               pre.Pre_course_no,
+               pre.level
+        FROM Course AS c
+            LEFT JOIN Prerequisite pre
+                ON c.Subject = pre.Subject
+                       AND c.Number =    pre.Course_no
+        ORDER BY c.Number, pre.level;
+    </select>
+
     <select id="getCoursesByLevel" resultMap="FullCourseDetail">
-        SELECT DISTINCT MOD(temp.Number, 10000) AS Number,
-                        temp.Subject,
-                        temp.Name,
-                        temp.Frequency,
-                        temp.Pre_subject,
-                        temp.Pre_course_no,
-                        temp.Level,
-                        p.Tid AS Tid,
+        SELECT DISTINCT MOD(c.Number, 10000) AS Number,
+                        c.Subject,
+                        c.Name,
+                        c.Frequency,
+                        pre.Pre_subject,
+                        pre.Pre_course_no,
+                        pre.Level,
+                        p.Tid,0 AS Tid,
                         p.Name AS ProfName,
                         p.Over_rate AS Over_rate,
                         p.Diff_rate AS Diff_rate
-        FROM Professor p,
-             Teaching t,
-             (SELECT DISTINCT c.*,
-                              pre.Pre_subject,
-                              pre.Pre_course_no,
-                              pre.Level
-             FROM Course c
-                 LEFT JOIN Prerequisite pre
-                     ON c.Subject = pre.Subject and c.Number = pre.Course_no
-            <if test="level != null">
-                WHERE (c.Number % 10000) >= (#{level} * 1000)
-                  AND ((#{level}+1) * 1000) > (c.Number % 10000)
-            </if>
-            ) AS temp
-        WHERE temp.Subject = t.Subject and temp.Number = t.Course_no and p.Tid = t.Tid
-        ORDER BY temp.Number, temp.Level;
+        FROM Course c
+            LEFT JOIN Prerequisite pre
+                ON c.Subject = pre.Subject
+                       AND c.Number = pre.Course_no
+            LEFT JOIN Teaching t
+                ON c.Subject = t.Subject
+                       AND c.Number = t.Course_no
+            LEFT JOIN Professor p
+                ON p.Tid = t.Tid
+        <if test="level != null">
+            WHERE c.Subject = 'CS'
+            AND (c.Number % 10000) >= (#{level} * 1000)
+            AND ((#{level}+1) * 1000) > (c.Number % 10000)
+        </if>
+        ORDER BY c.Number, pre.Level;
     </select>
 
 </mapper>

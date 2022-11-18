@@ -29,4 +29,10 @@ public interface CourseMapper extends MppBaseMapper<Course> {
      * @return
      */
     Course getCourseBySubjectAndNumber(String subject, Integer number);
+
+    /**
+     * Get all courses with their prerequisites
+     * @return
+     */
+    List<Course> getAllCourseWithPrereqs();
 }

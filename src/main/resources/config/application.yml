@@ -41,3 +41,8 @@ constants:
   depth-eece: eece4353, eece4354, eece4376
   depth-math: math3320, math3620, math4600, math4620
   seminar: cs4959
+
+course-status:
+  selected: selected
+  able: able
+  unable: unable

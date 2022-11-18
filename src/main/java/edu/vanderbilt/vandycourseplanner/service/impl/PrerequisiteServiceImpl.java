@@ -9,12 +9,10 @@ import edu.vanderbilt.vandycourseplanner.mapper.PrerequisiteMapper;
 import edu.vanderbilt.vandycourseplanner.domain.CourseStatusResponse;
 import edu.vanderbilt.vandycourseplanner.service.IPrerequisiteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Prerequisite service impl
@@ -23,117 +21,96 @@ import java.util.Objects;
  * @since 2022-11-04
  */
 @Service
-public class PrerequisiteServiceImpl extends MppServiceImpl<PrerequisiteMapper, Prerequisite> implements IPrerequisiteService {
+public class PrerequisiteServiceImpl
+        extends MppServiceImpl<PrerequisiteMapper, Prerequisite>
+        implements IPrerequisiteService {
 
     @Autowired
     private CourseMapper courseMapper;
 
-    @Autowired
-    private PrerequisiteMapper prerequisiteMapper;
+    @Value("${course-status.selected}")
+    private String selected;
+
+    @Value("${course-status.able}")
+    private String able;
+
+    @Value("${course-status.unable}")
+    private String unable;
 
     @Override
     public List<CourseStatusResponse> getPrereqs(List<CourseRequest> courses) {
 
-        List<Course> theCourses = new ArrayList<>();
-        HashMap<String, Integer> courseMap = new HashMap<>();
-        for (CourseRequest cs : courses) {
-            courseMap.put(cs.getSubject() + cs.getCourse_no(), 1);
-        }
+        // Put all selected course into a set to check prereqs
+        Set<String> selectedCourse = new HashSet<>();
+        courses.forEach(cs -> selectedCourse.add(cs.getSubject() + cs.getCourse_no()));
 
-        List<Course> allCourse = courseMapper.selectList(null);
+        // Get all courses with prereqs
+        List<Course> allCourseWithPrereqs =  courseMapper.getAllCourseWithPrereqs();
         List<CourseStatusResponse> allStatus = new ArrayList<>();
 
-        for (Course crs : allCourse) {
+        for (Course crs : allCourseWithPrereqs) {
+            // Initialize returning response for each course
             CourseStatusResponse thisStatus = new CourseStatusResponse();
             thisStatus.setSubject(crs.getSubject());
             thisStatus.setCourse_no(crs.getNumber());
-            thisStatus.setStatus("notable");
+            String index = crs.getSubject() + crs.getNumber();
 
-            List<Prerequisite> prereqList = prerequisiteMapper.getPrereqsByCourseSubjectAndNumber(
-                    crs.getSubject(),
-                    crs.getNumber()
-            );
-
-            boolean theLevelSatisfied = false;
-            //the boolean variable to check if all courses in the current level is satisfied
-
-            if (courseMap.getOrDefault(crs.getSubject() + crs.getNumber(), 0) == 1) {
-                //if the course is already selected, mark the status as selected
-                thisStatus.setStatus("selected");
+            // If the course is already selected, mark the status as selected
+            if (selectedCourse.contains(index)) {
+                thisStatus.setStatus(selected);
                 allStatus.add(thisStatus);
                 continue;
             }
 
-            //if the course (checked not selected by above) has no prerequisite, it is enabled
+            // Set the default returned course status "able"
+            thisStatus.setStatus(able);
+            List<Prerequisite> prereqList = crs.getPrerequisites();
+
+            // If the course not selected has no prerequisite, it is enabled
             if (prereqList.isEmpty()) {
-                thisStatus.setStatus("able");
                 allStatus.add(thisStatus);
                 continue;
             }
 
-            //check each prerequisite course
+            // The boolean variable to check if any course in a single level is satisfied
+            boolean theLevelSatisfied = prereqList.get(0).getLevel() == 0;
+
+            // Check each prerequisite course with level > 0
             for (int i = 0; i < prereqList.size(); ++i) {
 
-                //find the current prerequisite course from the database
-                Course thisPrereqCourse = courseMapper.getCourseBySubjectAndNumber(
-                        prereqList.get(i).getPre_subject(),
-                        prereqList.get(i).getPre_course_no()
-                );
+                Prerequisite thisPreq = prereqList.get(i);
+                String preIndex = thisPreq.getPre_subject() + thisPreq.getPre_course_no();
 
-                //if there are level0 for this course prereqs
-                if (prereqList.get(i).getLevel() == 0) {
-                    boolean foundLevelZero = courseMap.getOrDefault(
-                            thisPrereqCourse.getSubject() + thisPrereqCourse.getNumber(),
-                            0
-                    ) == 1;
-                    //check if the selected courses contain this level 0 prerequisite course
-                    if (foundLevelZero) {
-                        thisStatus.setStatus("notable");
+                // Disable all 0 level courses
+                if (thisPreq.getLevel() == 0 && selectedCourse.contains(preIndex)) {
+                    thisStatus.setStatus(unable);
+                    break;
+                }
+
+                // Check if the last level has any prereq course satisfied
+                if (thisPreq.getLevel() > 0
+                        && i > 0
+                        && !Objects.equals(thisPreq.getLevel(), prereqList.get(i - 1).getLevel())) {
+                    if (!theLevelSatisfied) {
+                        thisStatus.setStatus(unable);
                         break;
-                        //jump out of the prereq checking since it is already not able
-                    }
-                } else
-                //check level >0
-                {
-                    /**if the current level is already not satisfied due
-                     * to some prereq courses in the level not selected,
-                     * skip the current prereq course checking until the
-                     * next level (when the variable may be reset to be true)
-                     **/
-                    if (theLevelSatisfied) {
-                        continue;
-                    }
-
-                    //when it is the next level
-                    if (i > 0 && !Objects.equals(prereqList.get(i).getLevel(), prereqList.get(i - 1).getLevel())) {
-                        //check if the variable is true for the previous level
-                        if (!theLevelSatisfied) {
-                            //set the status to be notable and stop checking
-                            // prereqs since one whole level is not satisfied
-                            thisStatus.setStatus("notable");
-                            break;
-                        } else {
-                            //if the previous level is satisfied, start checking the current prereq
-                            // (the first prereq for the new level)
-                            theLevelSatisfied = courseMap.getOrDefault(
-                                    thisPrereqCourse.getSubject() + thisPrereqCourse.getNumber(),
-                                    0
-                            ) == 1;
-                        }
                     } else {
-                        //continue checking the prereq for the current level
-                        theLevelSatisfied = courseMap.getOrDefault(
-                                thisPrereqCourse.getSubject() + thisPrereqCourse.getNumber(),
-                                0
-                        ) == 1;
+                        if (!index.equals(preIndex)) {
+                            theLevelSatisfied = selectedCourse.contains(preIndex);
+                        }
                     }
+                } else {
+                    // Skip if it already has a prereq satisfied
+                    if (theLevelSatisfied) continue;
+                    // Continue checking the prereq for the current level
+                    theLevelSatisfied = index.equals(preIndex) || selectedCourse.contains(preIndex);
                 }
             }
-            if (theLevelSatisfied) {
-                thisStatus.setStatus("able");
+            if (!theLevelSatisfied) {
+                thisStatus.setStatus(unable);
             }
-            allStatus.add(thisStatus);
 
+            allStatus.add(thisStatus);
         }
         return allStatus;
     }
