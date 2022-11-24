@@ -7,6 +7,7 @@ import edu.vanderbilt.vandycourseplanner.pojo.Saving;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Saving service
@@ -21,7 +22,7 @@ public interface ISavingService extends IMppService<Saving> {
      * @param email
      * @return
      */
-    List<CourseStatusResponse> getSavingByUser(String email);
+    Map<String, String> getSavingByUser(String email);
 
     /**
      * Add one user saved course selection
