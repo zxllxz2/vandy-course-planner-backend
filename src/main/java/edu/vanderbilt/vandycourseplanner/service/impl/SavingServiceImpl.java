@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Saving service impl
@@ -32,9 +34,9 @@ public class SavingServiceImpl extends MppServiceImpl<SavingMapper, Saving> impl
     private IPrerequisiteService prerequisiteService;
 
     @Override
-    public List<CourseStatusResponse> getSavingByUser(String email) {
+    public Map<String, String> getSavingByUser(String email) {
         List<Saving> savings = savingMapper.selectList(new QueryWrapper<Saving>().eq("Email", email));
-        if (savings.isEmpty()) return new ArrayList<>();
+        if (savings.isEmpty()) return new HashMap<>();
         List<CourseRequest> input = new ArrayList<>();
         savings.forEach(s -> input.add(new CourseRequest(s.getSubject(), s.getCourse_no())));
         return prerequisiteService.getPrereqs(input);
