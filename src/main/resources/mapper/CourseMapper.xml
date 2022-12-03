@@ -63,17 +63,17 @@
     </select>
 
     <select id="getCoursesByLevel" resultMap="FullCourseDetail">
-        SELECT DISTINCT MOD(c.Number, 10000) AS Number,
-                        c.Subject,
-                        c.Name,
-                        c.Frequency,
-                        pre.Pre_subject,
-                        pre.Pre_course_no,
-                        pre.Level,
-                        p.Tid,0 AS Tid,
-                        p.Name AS ProfName,
-                        p.Over_rate AS Over_rate,
-                        p.Diff_rate AS Diff_rate
+        SELECT  c.Number AS Number,
+                c.Subject,
+                c.Name,
+                c.Frequency,
+                pre.Pre_subject,
+                pre.Pre_course_no,
+                pre.Level,
+                p.Tid,0 AS Tid,
+                p.Name AS ProfName,
+                p.Over_rate AS Over_rate,
+                p.Diff_rate AS Diff_rate
         FROM Course c
             LEFT JOIN Prerequisite pre
                 ON c.Subject = pre.Subject

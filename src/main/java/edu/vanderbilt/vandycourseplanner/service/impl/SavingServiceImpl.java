@@ -3,7 +3,7 @@ package edu.vanderbilt.vandycourseplanner.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import edu.vanderbilt.vandycourseplanner.domain.CourseRequest;
-import edu.vanderbilt.vandycourseplanner.domain.CourseStatusResponse;
+import edu.vanderbilt.vandycourseplanner.mapper.PrerequisiteMapper;
 import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
 import edu.vanderbilt.vandycourseplanner.pojo.Saving;
 import edu.vanderbilt.vandycourseplanner.mapper.SavingMapper;
@@ -13,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Saving service impl
@@ -29,12 +28,14 @@ public class SavingServiceImpl extends MppServiceImpl<SavingMapper, Saving> impl
     private SavingMapper savingMapper;
 
     @Autowired
+    private PrerequisiteMapper prerequisiteMapper;
+
+    @Autowired
     private IPrerequisiteService prerequisiteService;
 
     @Override
-    public List<CourseStatusResponse> getSavingByUser(String email) {
+    public Map<String, String> getSavingByUser(String email) {
         List<Saving> savings = savingMapper.selectList(new QueryWrapper<Saving>().eq("Email", email));
-        if (savings.isEmpty()) return new ArrayList<>();
         List<CourseRequest> input = new ArrayList<>();
         savings.forEach(s -> input.add(new CourseRequest(s.getSubject(), s.getCourse_no())));
         return prerequisiteService.getPrereqs(input);
@@ -74,8 +75,18 @@ public class SavingServiceImpl extends MppServiceImpl<SavingMapper, Saving> impl
                 .eq("Subject", subject)
                 .eq("Course_no", number);
 
-        if (savingMapper.selectList(eq).size() != 1) {
-            return RespBean.error("User not exist or course not saved");
+        QueryWrapper<Saving> allButOne = new QueryWrapper<Saving>()
+                .eq("Email", email)
+                .and(i -> i.ne("Subject", subject)
+                        .or().ne("Course_no", number));
+
+
+        List<Saving> savings = savingMapper.selectList(allButOne);
+        if (!savings.isEmpty()) {
+            Set<String> prereqs = new HashSet<>(prerequisiteMapper.getPrereqsFromSavings(savings));
+            if (prereqs.contains(subject + number.toString())) {
+                return RespBean.template(400, null, null);
+            }
         }
 
         if (savingMapper.delete(eq) == 1) {

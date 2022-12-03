@@ -85,7 +85,14 @@ public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> impl
             if (prerequisiteList.get(0).getLevel() < 100) {
                 levelZero.add(prerequisite0.getPre_subject() + " " + prerequisite0.getPre_course_no().toString());
             } else {
-                coreqs.add(prerequisite0.getPre_subject() + " " + prerequisite0.getPre_course_no().toString());
+                StringBuilder coName = new StringBuilder(prerequisite0.getPre_subject());
+                coName.append(' ');
+                coName.append(prerequisite0.getPre_course_no());
+                if (prerequisite0.getPre_subject().equals(course.getSubject())
+                        && Objects.equals(prerequisite0.getPre_course_no(), course.getNumber())) {
+                    coName.append('L');
+                }
+                coreqs.add(coName.toString());
             }
 
 
@@ -99,7 +106,14 @@ public class CourseServiceImpl extends MppServiceImpl<CourseMapper, Course> impl
                 }
                 Prerequisite prerequisiteCur = prerequisiteList.get(i);
                 if (prerequisiteCur.getLevel() >= 100) {
-                    coreqs.add(prerequisiteCur.getPre_subject() + " " + prerequisiteCur.getPre_course_no().toString());
+                    StringBuilder coName2 = new StringBuilder(prerequisiteCur.getPre_subject());
+                    coName2.append(' ');
+                    coName2.append(prerequisiteCur.getPre_course_no());
+                    if (prerequisiteCur.getPre_subject().equals(course.getSubject())
+                            && Objects.equals(prerequisiteCur.getPre_course_no(), course.getNumber())) {
+                        coName2.append('L');
+                    }
+                    coreqs.add(coName2.toString());
                 } else {
                     levelZero.add(prerequisiteCur.getPre_subject() + " " + prerequisiteCur.getPre_course_no().toString());
                 }

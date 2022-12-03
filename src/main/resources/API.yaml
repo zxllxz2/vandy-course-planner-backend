@@ -188,6 +188,7 @@ paths:
           description: "Not Found"
         "405":
           description: "Invalid input"
+  /savings/add:
     post:
       tags:
         - "Savings"
@@ -198,28 +199,18 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - name: "email"
-          type: "string"
-          in: "query"
+        - in: "body"
+          name: "body"
+          description: "Array of selected courses"
           required: true
-          format: "email"
-        - name: "subject"
-          type: "string"
-          in: "query"
-        - name: "number"
-          type: "integer"
-          in: "query"
-          required: true
-          format: "int32"
-          description: "Course number"
+          schema:
+            $ref: "#/definitions/CourseSaved"
       responses:
         "200":
           description: "Successful"
           schema:
             type: "string"
             example: "Successfully deleted"
-        "401":
-          description: "Unauthorized"
         "404":
           description: "Not Found"
         "500":
@@ -227,35 +218,28 @@ paths:
           schema:
             type: "string"
             example: "Fail to delete course"
-    delete:
+  /savings/delete:
+    post:
       tags:
         - "Savings"
       summary: "Delete a selected course for a user"
       description: "Remove the course record from the table Saving"
       operationId: "deleteSelectedCourse"
       parameters:
-        - name: "email"
-          type: "string"
-          in: "query"
+        - in: "body"
+          name: "body"
+          description: "Array of selected courses"
           required: true
-          format: "email"
-        - name: "subject"
-          type: "string"
-          in: "query"
-        - name: "number"
-          type: "integer"
-          in: "query"
-          required: true
-          format: "int32"
-          description: "Course number"
+          schema:
+            $ref: "#/definitions/CourseSaved"
       responses:
         "200":
           description: "Successful"
           schema:
             type: "string"
             example: "Successfully saved"
-        "401":
-          description: "Unauthorized"
+        "400":
+          description: "Cannot delete"
         "404":
           description: "Not Found"
         "500":
@@ -335,16 +319,16 @@ definitions:
       status:
         type: "string"
         enum: ["selected", "able", "notable"]
-  # ResponseBean:
-  #   type: "object"
-  #   required:
-  #     - "code"
-  #   properties:
-  #     code:
-  #       type: "integer"
-  #       format: "int32"
-  #       example: 200
-  #     message:
-  #       type: "string"
-  #     object:
-  #       type: "object"
+  CourseSaved:
+    type: "object"
+    required:
+      - "email"
+      - "number"
+    properties:
+      email:
+        type: "string"
+      number:
+        type: "integer"
+        format: "int32"
+      subject:
+        type: "string"
