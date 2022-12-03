@@ -50,26 +50,20 @@ public class PrerequisiteServiceImpl
 
         for (Course crs : allCourseWithPrereqs) {
             // Initialize returning response for each course
-//            CourseStatusResponse thisStatus = new CourseStatusResponse();
-//            thisStatus.setSubject(crs.getSubject());
-//            thisStatus.setCourse_no(crs.getNumber());
             String index = crs.getSubject() + crs.getNumber();
 
             // If the course is already selected, mark the status as selected
             if (selectedCourse.contains(index)) {
-//                thisStatus.setStatus(selected);
                 allStatus.put(index, selected);
                 continue;
             }
 
             // Set the default returned course status "able"
-//            thisStatus.setStatus(able);
             allStatus.put(index, able);
             List<Prerequisite> prereqList = crs.getPrerequisites();
 
             // If the course not selected has no prerequisite, it is enabled
             if (prereqList.isEmpty()) {
-//                allStatus.put(index, able);
                 continue;
             }
 
@@ -84,7 +78,6 @@ public class PrerequisiteServiceImpl
 
                 // Disable all 0 level courses
                 if (thisPreq.getLevel() == 0 && selectedCourse.contains(preIndex)) {
-//                    thisStatus.setStatus(unable);
                     allStatus.put(index, unable);
                     break;
                 }
@@ -94,7 +87,6 @@ public class PrerequisiteServiceImpl
                         && i > 0
                         && !Objects.equals(thisPreq.getLevel(), prereqList.get(i - 1).getLevel())) {
                     if (!theLevelSatisfied) {
-//                        thisStatus.setStatus(unable);
                         allStatus.put(index, unable);
                         break;
                     } else {
@@ -111,10 +103,7 @@ public class PrerequisiteServiceImpl
             }
             if (!theLevelSatisfied) {
                 allStatus.put(index, unable);
-//                thisStatus.setStatus(unable);
             }
-
-//            allStatus.add(thisStatus);
         }
         return allStatus;
     }

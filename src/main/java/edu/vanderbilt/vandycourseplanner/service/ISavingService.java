@@ -1,12 +1,9 @@
 package edu.vanderbilt.vandycourseplanner.service;
 
 import com.github.jeffreyning.mybatisplus.service.IMppService;
-import edu.vanderbilt.vandycourseplanner.domain.CourseStatusResponse;
 import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
 import edu.vanderbilt.vandycourseplanner.pojo.Saving;
-import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.util.List;
 import java.util.Map;
 
 /**

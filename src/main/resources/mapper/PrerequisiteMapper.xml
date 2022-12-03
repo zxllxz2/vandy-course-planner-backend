@@ -23,6 +23,16 @@
         (#{subject} =  pre.Pre_subject AND #{number}=pre.Pre_course_no AND pre.Level=0)
         ORDER BY Level
     </select>
+    
+    <select id="getPrereqsFromSavings" resultType="string">
+        SELECT DISTINCT CONCAT(p.Pre_subject, p.Pre_course_no)
+        FROM Prerequisite AS p
+        WHERE
+        <foreach item="item" index="index" collection="savings"
+                 open="(Subject, Course_no) in (" separator="," close=")" nullable="true">
+            (#{item.Subject}, #{item.Course_no})
+        </foreach>
+    </select>
 
     <select id="getCourseLevelZero" resultMap="BaseResultMap">
         SELECT DISTINCT Pre_subject,
