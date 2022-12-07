@@ -1,3 +1,6 @@
+# Author: Toby Zhu
+# Lambda handler function for parsing course data
+
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd

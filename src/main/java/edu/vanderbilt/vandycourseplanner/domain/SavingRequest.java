@@ -3,6 +3,11 @@ package edu.vanderbilt.vandycourseplanner.domain;
 import lombok.Data;
 import lombok.NonNull;
 
+/**
+ * @author Toby Zhu
+ *
+ * Request about saving info
+ */
 @Data
 public class SavingRequest {
 

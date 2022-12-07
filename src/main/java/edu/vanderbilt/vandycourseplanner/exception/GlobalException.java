@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
+ * @author Toby Zhu
+ *
  * Global SQL exception capture
  */
 @RestControllerAdvice

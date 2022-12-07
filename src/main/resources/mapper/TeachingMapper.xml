@@ -2,14 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.vanderbilt.vandycourseplanner.mapper.TeachingMapper">
 
-    <!-- 通用查询映射结果 -->
+    <!-- Author: Toby Zhu -->
+    <!-- SQL query implementation for teaching services -->
+
     <resultMap id="BaseResultMap" type="edu.vanderbilt.vandycourseplanner.pojo.Teaching">
         <id column="Subject" property="Subject" />
         <result column="Course_no" property="Course_no" />
         <result column="Tid" property="Tid" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         Subject, Course_no, Tid
     </sql>

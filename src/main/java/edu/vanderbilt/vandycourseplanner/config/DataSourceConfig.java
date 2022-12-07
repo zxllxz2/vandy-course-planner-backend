@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
+/**
+ * @author Toby Zhu
+ *
+ * Manual configuration for data source
+ */
 @Configuration
 public class DataSourceConfig {
 

@@ -10,9 +10,15 @@ import java.util.Map;
 /**
  * Prerequisite service
  *
- * @author Toby Zhu
+ * @author Chenxi Dong
  * @since 2022-11-04
  */
 public interface IPrerequisiteService extends IMppService<Prerequisite> {
+
+    /**
+     * Compute course status according to course selected
+     * @param courses - selected courses
+     * @return map (course name : status)
+     */
     Map<String, String> getPrereqs(List<CourseRequest> courses);
 }

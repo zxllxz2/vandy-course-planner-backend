@@ -23,6 +23,8 @@ public interface CourseMapper extends MppBaseMapper<Course> {
     List<Course> getCoursesByLevel(Integer level);
 
     /**
+     * @author Chenxi Dong
+     *
      * Get the course by subject and course number
      * @param subject
      * @param number

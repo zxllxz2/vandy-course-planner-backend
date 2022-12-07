@@ -1,3 +1,6 @@
+# Author: Toby Zhu
+# API Doc for frontend and backend communication and joint debugging
+
 swagger: "2.0"
 info:
   description: "This is the API documentation v1.0.0 of the project Vandy Course Planner."
