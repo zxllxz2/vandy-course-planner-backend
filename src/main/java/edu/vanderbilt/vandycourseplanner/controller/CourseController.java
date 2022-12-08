@@ -2,7 +2,6 @@ package edu.vanderbilt.vandycourseplanner.controller;
 
 
 import edu.vanderbilt.vandycourseplanner.domain.CourseRequest;
-import edu.vanderbilt.vandycourseplanner.pojo.Course;
 import edu.vanderbilt.vandycourseplanner.pojo.RespBean;
 import edu.vanderbilt.vandycourseplanner.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;

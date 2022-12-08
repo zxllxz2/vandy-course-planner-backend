@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * @author Toby Zhu
+ *
+ * Entrance of the main method
+ */
 @SpringBootApplication
 @EnableMPP
 @MapperScan("edu.vanderbilt.vandycourseplanner.mapper")

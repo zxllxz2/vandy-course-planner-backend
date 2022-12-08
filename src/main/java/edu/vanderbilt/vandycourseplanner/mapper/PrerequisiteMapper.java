@@ -17,6 +17,8 @@ import java.util.List;
 @Mapper
 public interface PrerequisiteMapper extends MppBaseMapper<Prerequisite> {
     /**
+     * @author Chenxi Dong
+     *
      * Get prerequisites by subject and course number
      * @param subject
      * @param number

@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.vanderbilt.vandycourseplanner.mapper.ProfessorMapper">
 
-    <!-- 通用查询映射结果 -->
+    <!-- Author: Toby Zhu -->
+    <!-- SQL query implementation for professor services -->
+
     <resultMap id="BaseResultMap" type="edu.vanderbilt.vandycourseplanner.pojo.Professor">
         <id column="Tid" property="Tid" />
         <result column="Name" property="Name" />
@@ -10,7 +12,6 @@
         <result column="Diff_rate" property="Diff_rate" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         Tid, Name, Over_rate, Diff_rate
     </sql>

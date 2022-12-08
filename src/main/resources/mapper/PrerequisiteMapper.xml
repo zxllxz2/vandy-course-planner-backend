@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.vanderbilt.vandycourseplanner.mapper.PrerequisiteMapper">
 
-    <!-- 通用查询映射结果 -->
+    <!-- Author: Toby Zhu (50%) -->
+    <!-- Author: Chenxi Dong (50%) -->
+    <!-- SQL query implementation for prereq services -->
+
     <resultMap id="BaseResultMap" type="edu.vanderbilt.vandycourseplanner.pojo.Prerequisite">
         <id column="Pre_subject" property="Pre_subject" />
         <result column="Pre_course_no" property="Pre_course_no" />
@@ -11,7 +14,6 @@
         <result column="Level" property="Level" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         Pre_subject, Pre_course_no, Subject, Course_no, Level
     </sql>

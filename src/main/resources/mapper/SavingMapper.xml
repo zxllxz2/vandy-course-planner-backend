@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.vanderbilt.vandycourseplanner.mapper.SavingMapper">
 
-    <!-- 通用查询映射结果 -->
+    <!-- Author: Toby Zhu -->
+    <!-- SQL query implementation for saving services -->
+
     <resultMap id="BaseResultMap" type="edu.vanderbilt.vandycourseplanner.pojo.Saving">
         <id column="Email" property="Email" />
         <result column="Subject" property="Subject" />
@@ -10,7 +12,6 @@
         <result column="Saving_time" property="Saving_time" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         Email, Subject, Course_no, Saving_time
     </sql>

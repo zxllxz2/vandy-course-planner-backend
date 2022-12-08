@@ -3,6 +3,11 @@ package edu.vanderbilt.vandycourseplanner.domain;
 import lombok.Data;
 import lombok.NonNull;
 
+/**
+ * @author Chenxi Dong
+ *
+ * Request of course info
+ */
 @Data
 public class CourseRequest {
 

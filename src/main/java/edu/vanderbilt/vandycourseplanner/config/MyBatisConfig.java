@@ -11,6 +11,11 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+/**
+ * @author Toby Zhu
+ *
+ * Manual configuration of MyBatis-Plus
+ */
 @Configuration
 public class MyBatisConfig {
 

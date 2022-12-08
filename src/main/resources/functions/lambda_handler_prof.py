@@ -1,3 +1,6 @@
+# Author: Toby Zhu
+# Lambda handler function for parsing professor data
+
 import re
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService

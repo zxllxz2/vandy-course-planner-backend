@@ -6,7 +6,6 @@ import edu.vanderbilt.vandycourseplanner.mapper.CourseMapper;
 import edu.vanderbilt.vandycourseplanner.pojo.Course;
 import edu.vanderbilt.vandycourseplanner.pojo.Prerequisite;
 import edu.vanderbilt.vandycourseplanner.mapper.PrerequisiteMapper;
-import edu.vanderbilt.vandycourseplanner.domain.CourseStatusResponse;
 import edu.vanderbilt.vandycourseplanner.service.IPrerequisiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +16,8 @@ import java.util.*;
 /**
  * Prerequisite service impl
  *
- * @author Toby Zhu
+ * @author Chenxi Dong (90%)
+ * @author Toby Zhu - modification (10%)
  * @since 2022-11-04
  */
 @Service
